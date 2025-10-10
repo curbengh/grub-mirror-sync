@@ -17,14 +17,16 @@ jobs:
       - name: SSH setup
         env:
           GRUB_SSH_KEY: ${{ secrets.GRUB_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+          SSH_CONFIG: ${{ vars.SSH_CONFIG }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ env.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
           echo "$GRUB_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          echo "${{ env.SSH_CONFIG }}" > ~/.ssh/config
+          echo "$SSH_CONFIG" > ~/.ssh/config
           chmod 600 ~/.ssh/config
       - name: Git clone
         run: |
@@ -50,14 +52,16 @@ jobs:
       - name: SSH setup
         env:
           GRUB_EXTRAS_SSH_KEY: ${{ secrets.GRUB_EXTRAS_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+          SSH_CONFIG: ${{ vars.SSH_CONFIG }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ env.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
           echo "$GRUB_EXTRAS_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          echo "${{ env.SSH_CONFIG }}" > ~/.ssh/config
+          echo "$SSH_CONFIG" > ~/.ssh/config
           chmod 600 ~/.ssh/config
       - name: Git clone
         run: |
@@ -83,14 +87,16 @@ jobs:
       - name: SSH setup
         env:
           GNULIB_SSH_KEY: ${{ secrets.GNULIB_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+          SSH_CONFIG: ${{ vars.SSH_CONFIG }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ env.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
           echo "$GNULIB_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          echo "${{ env.SSH_CONFIG }}" > ~/.ssh/config
+          echo "$SSH_CONFIG" > ~/.ssh/config
           chmod 600 ~/.ssh/config
       - name: Git clone
         run: |
