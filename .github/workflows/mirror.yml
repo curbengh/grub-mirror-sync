@@ -1,0 +1,111 @@
+name: Mirror
+
+on:
+  schedule:
+    - cron: "27 2 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  grub-mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: SSH setup
+        env:
+          GRUB_SSH_KEY: ${{ secrets.GRUB_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ env.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          echo "$GRUB_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ env.SSH_CONFIG }}" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+      - name: Git clone
+        run: |
+          git clone github:curbengh/grub-mirror.git
+      - name: Set upstream
+        working-directory: grub-mirror
+        run: |
+          git remote add upstream https://git.savannah.gnu.org/git/grub.git
+      - name: Fetch upstream & rebase
+        working-directory: grub-mirror
+        run: |
+          git fetch upstream
+          git rebase upstream/master
+      - name: Push to mirror
+        working-directory: grub-mirror
+        run: |
+          git push origin master
+          git push --tags origin
+  grub-extras-mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: SSH setup
+        env:
+          GRUB_EXTRAS_SSH_KEY: ${{ secrets.GRUB_EXTRAS_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ env.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          echo "$GRUB_EXTRAS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ env.SSH_CONFIG }}" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+      - name: Git clone
+        run: |
+          git clone github:curbengh/grub-extras-mirror.git
+      - name: Set upstream
+        working-directory: grub-extras-mirror
+        run: |
+          git remote add upstream https://git.savannah.gnu.org/git/grub-extras.git
+      - name: Fetch upstream & rebase
+        working-directory: grub-extras-mirror
+        run: |
+          git fetch upstream
+          git rebase upstream/master
+      - name: Push to mirror
+        working-directory: grub-extras-mirror
+        run: |
+          git push origin master
+          git push --tags origin
+  gnulib-mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: SSH setup
+        env:
+          GNULIB_SSH_KEY: ${{ secrets.GNULIB_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ env.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          echo "$GNULIB_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ env.SSH_CONFIG }}" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+      - name: Git clone
+        run: |
+          git clone github:curbengh/gnulib-mirror.git
+      - name: Set upstream
+        working-directory: gnulib-mirror
+        run: |
+          git remote add upstream https://git.savannah.gnu.org/git/gnulib.git
+      - name: Fetch upstream & rebase
+        working-directory: gnulib-mirror
+        run: |
+          git fetch upstream
+          git rebase upstream/master
+      - name: Push to mirror
+        working-directory: gnulib-mirror
+        run: |
+          git push origin master
+          git push --tags origin
