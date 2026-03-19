@@ -34,7 +34,7 @@ jobs:
       - name: Set upstream
         working-directory: grub-mirror
         run: |
-          git remote add upstream https://git.savannah.gnu.org/git/grub.git
+          git remote add upstream https://gitlab.freedesktop.org/gnu-grub/grub.git
       - name: Fetch upstream & rebase
         working-directory: grub-mirror
         run: |
